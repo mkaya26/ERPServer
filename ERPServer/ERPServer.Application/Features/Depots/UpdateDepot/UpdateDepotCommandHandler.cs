@@ -3,6 +3,7 @@ using ERPServer.Domain.Entities;
 using ERPServer.Domain.Repositories;
 using GenericRepository;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using TS.Result;
 
 namespace ERPServer.Application.Features.Depots.UpdateDepot
@@ -10,10 +11,13 @@ namespace ERPServer.Application.Features.Depots.UpdateDepot
     internal sealed class UpdateDepotCommandHandler(
       IDepotRepository depotRepository,
       IUnitOfWork unitOfWork,
-      IMapper mapper) : IRequestHandler<UpdateDepotCommand, Result<string>>
+      IMapper mapper,
+       IHttpContextAccessor httpContextAccessor) : IRequestHandler<UpdateDepotCommand, Result<string>>
     {
         public async Task<Result<string>> Handle(UpdateDepotCommand request, CancellationToken cancellationToken)
         {
+            var userId = httpContextAccessor.HttpContext.User?.Claims.Select(f => f.Value).FirstOrDefault();
+            //
             Depot depot = await depotRepository.GetByExpressionWithTrackingAsync(f => f.Id == request.Id);
             //
             if (depot is null)
@@ -22,6 +26,9 @@ namespace ERPServer.Application.Features.Depots.UpdateDepot
             }
             //
             mapper.Map(request, depot);
+            //
+            depot.UpdateBy = userId?.ToUpper() ?? "";
+            depot.UpdateDate = DateTime.Now;
             //
             await unitOfWork.SaveChangesAsync(cancellationToken);
             //

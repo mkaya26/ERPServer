@@ -1,4 +1,5 @@
-﻿using ERPServer.Domain.Entities;
+﻿using ERPServer.Domain.Abstractions;
+using ERPServer.Domain.Entities;
 using GenericRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace ERPServer.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
-
+            //
             builder.Ignore<IdentityUserLogin<Guid>>();
             builder.Ignore<IdentityRoleClaim<Guid>>();
             builder.Ignore<IdentityUserToken<Guid>>();
