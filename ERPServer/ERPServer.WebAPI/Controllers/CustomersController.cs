@@ -4,6 +4,7 @@ using ERPServer.Application.Features.Customers.GetAllCustomer;
 using ERPServer.Application.Features.Customers.UpdateCustomer;
 using ERPServer.WebAPI.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERPServer.WebAPI.Controllers
@@ -13,7 +14,7 @@ namespace ERPServer.WebAPI.Controllers
         public CustomersController(IMediator mediator) : base(mediator)
         {
         }
-
+        //[AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GetAll(GetAllCustomerQuery request, CancellationToken cancellationToken)
         {
