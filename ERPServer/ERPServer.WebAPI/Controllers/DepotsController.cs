@@ -1,39 +1,39 @@
-﻿using ERPServer.Application.Features.Customers.CreateCustomer;
-using ERPServer.Application.Features.Customers.DeleteCustomerById;
-using ERPServer.Application.Features.Customers.GetAllCustomer;
-using ERPServer.Application.Features.Customers.UpdateCustomer;
+﻿using ERPServer.Application.Features.Depots.CreateDepot;
+using ERPServer.Application.Features.Depots.DeleteDepotById;
+using ERPServer.Application.Features.Depots.GetAllDepot;
+using ERPServer.Application.Features.Depots.UpdateDepot;
 using ERPServer.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERPServer.WebAPI.Controllers
 {
-    public class CustomersController : ApiController
+    public class DepotsController : ApiController
     {
-        public CustomersController(IMediator mediator) : base(mediator)
+        public DepotsController(IMediator mediator) : base(mediator)
         {
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAll(GetAllCustomerQuery request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(GetAllDepotQuery request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(CreateDepotCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteById(DeleteCustomerByIdCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteById(DeleteDepotByIdCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(UpdateDepotCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);

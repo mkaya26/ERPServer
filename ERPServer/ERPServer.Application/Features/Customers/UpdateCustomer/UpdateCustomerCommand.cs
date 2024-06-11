@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using TS.Result;
 
-namespace ERPServer.Application.Features.Customers.CreateCustomer
+namespace ERPServer.Application.Features.Customers.UpdateCustomer
 {
-    public sealed record CreateCustomerCommand(
+    public sealed record UpdateCustomerCommand(
+        Guid Id,
         string Name,
         string TaxDepartment,
         string TaxNumber,
