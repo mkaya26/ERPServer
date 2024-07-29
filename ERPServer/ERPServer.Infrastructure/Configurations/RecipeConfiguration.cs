@@ -8,6 +8,7 @@ namespace ERPServer.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Recipe> builder)
         {
+            builder.HasOne(x => x.Product).WithMany().OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
