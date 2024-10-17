@@ -3,17 +3,23 @@ using ERPServer.Application.Features.Customers.CreateCustomer;
 using ERPServer.Application.Features.Customers.UpdateCustomer;
 using ERPServer.Application.Features.Depots.CreateDepot;
 using ERPServer.Application.Features.Depots.UpdateDepot;
+using ERPServer.Application.Features.Orders.CreateOrder;
 using ERPServer.Application.Features.Products.CreateProduct;
 using ERPServer.Application.Features.Products.UpdateProduct;
 using ERPServer.Domain.Entities;
 using ERPServer.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace ERPServer.Application.Mapping
 {
     public sealed class MappingProfile : Profile
     {
-        public MappingProfile()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MappingProfile(IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+            var userId = _httpContextAccessor.HttpContext.User?.Claims.Select(f => f.Value).FirstOrDefault();
+            //
             CreateMap<CreateCustomerCommand, Customer>();
             CreateMap<UpdateCustomerCommand, Customer>();
             //
@@ -22,7 +28,7 @@ namespace ERPServer.Application.Mapping
             //
             CreateMap<CreateProductCommand, Product>()
                 .ForMember(
-                    m => m.Type, 
+                    m => m.Type,
                     o => o.MapFrom(
                     v => ProductTypeEnum.FromValue(v.TypeValue)));
             CreateMap<UpdateProductCommand, Product>()
@@ -30,6 +36,18 @@ namespace ERPServer.Application.Mapping
                     m => m.Type,
                     o => o.MapFrom(
                     v => ProductTypeEnum.FromValue(v.TypeValue)));
+            //
+            CreateMap<CreateOrderCommand, Order>()
+                .ForMember(m => m.OrderDetails,
+                o => o.MapFrom(p => p.OrderDetails.Select(
+                   s => new OrderDetail
+                   {
+                       Price = s.Price,
+                       ProductId = s.ProductId,
+                       Quantity = s.Quantity,
+                       CreateBy = userId ?? "",
+                       CreateDate = DateTime.Now
+                   }).ToList()));
         }
     }
 }
