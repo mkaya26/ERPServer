@@ -6,7 +6,7 @@ namespace ERPServer.Application.Features.Orders.CreateOrder
 {
     public sealed record CreateOrderCommand(
         Guid CustomerId,
-        DateTime OrderDate,
-        DateTime DeliveryDate,
+        DateOnly OrderDate,
+        DateOnly DeliveryDate,
         List<OrderDetailDto> OrderDetails) : IRequest<Result<string>>;
 }

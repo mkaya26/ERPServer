@@ -10,8 +10,8 @@ namespace ERPServer.Domain.Entities
         public long OrderNumber { get; set; }
         public short OrderNumberYear { get; set; }
         public string OrderNumberFull { get; set; } = string.Empty;
-        public DateTime OrderDate { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateOnly OrderDate { get; set; }
+        public DateOnly DeliveryDate { get; set; }
         public OrderStatusEnum Status { get; set; } = OrderStatusEnum.Pending;
         public List<OrderDetail>? OrderDetails { get; set; }
     }

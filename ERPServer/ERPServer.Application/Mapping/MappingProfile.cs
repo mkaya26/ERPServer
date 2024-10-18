@@ -4,6 +4,7 @@ using ERPServer.Application.Features.Customers.UpdateCustomer;
 using ERPServer.Application.Features.Depots.CreateDepot;
 using ERPServer.Application.Features.Depots.UpdateDepot;
 using ERPServer.Application.Features.Orders.CreateOrder;
+using ERPServer.Application.Features.Orders.UpdateOrder;
 using ERPServer.Application.Features.Products.CreateProduct;
 using ERPServer.Application.Features.Products.UpdateProduct;
 using ERPServer.Domain.Entities;
@@ -38,6 +39,18 @@ namespace ERPServer.Application.Mapping
                     v => ProductTypeEnum.FromValue(v.TypeValue)));
             //
             CreateMap<CreateOrderCommand, Order>()
+                .ForMember(m => m.OrderDetails,
+                o => o.MapFrom(p => p.OrderDetails.Select(
+                   s => new OrderDetail
+                   {
+                       Price = s.Price,
+                       ProductId = s.ProductId,
+                       Quantity = s.Quantity,
+                       CreateBy = userId ?? "",
+                       CreateDate = DateTime.Now
+                   }).ToList()));
+            //
+            CreateMap<UpdateOrderCommand, Order>()
                 .ForMember(m => m.OrderDetails,
                 o => o.MapFrom(p => p.OrderDetails.Select(
                    s => new OrderDetail
