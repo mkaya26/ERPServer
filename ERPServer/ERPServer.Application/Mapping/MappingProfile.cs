@@ -50,17 +50,9 @@ namespace ERPServer.Application.Mapping
                        CreateDate = DateTime.Now
                    }).ToList()));
             //
-            CreateMap<UpdateOrderCommand, Order>()
-                .ForMember(m => m.OrderDetails,
-                o => o.MapFrom(p => p.OrderDetails.Select(
-                   s => new OrderDetail
-                   {
-                       Price = s.Price,
-                       ProductId = s.ProductId,
-                       Quantity = s.Quantity,
-                       //CreateBy = userId ?? "",
-                       CreateDate = DateTime.Now
-                   }).ToList()));
+            CreateMap<UpdateOrderCommand, Order>().ForMember(
+                member => member.OrderDetails, 
+                options => options.Ignore());
         }
     }
 }
