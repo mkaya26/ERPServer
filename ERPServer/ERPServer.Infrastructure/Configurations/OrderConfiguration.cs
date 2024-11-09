@@ -9,7 +9,6 @@ namespace ERPServer.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.Property(p => p.OrderNumber).HasColumnType("varchar(16)");
             builder.Property(p => p.Status).HasConversion(type => type.Value, value => OrderStatusEnum.FromValue(value));
         }
     }

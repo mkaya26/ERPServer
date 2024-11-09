@@ -15,11 +15,11 @@ namespace ERPServer.Application.Mapping
 {
     public sealed class MappingProfile : Profile
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public MappingProfile(IHttpContextAccessor httpContextAccessor)
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+        public MappingProfile()
         {
-            _httpContextAccessor = httpContextAccessor;
-            var userId = _httpContextAccessor.HttpContext.User?.Claims.Select(f => f.Value).FirstOrDefault();
+            //_httpContextAccessor = httpContextAccessor;
+            //var userId = _httpContextAccessor.HttpContext.User?.Claims.Select(f => f.Value).FirstOrDefault();
             //
             CreateMap<CreateCustomerCommand, Customer>();
             CreateMap<UpdateCustomerCommand, Customer>();
@@ -46,7 +46,7 @@ namespace ERPServer.Application.Mapping
                        Price = s.Price,
                        ProductId = s.ProductId,
                        Quantity = s.Quantity,
-                       CreateBy = userId ?? "",
+                       //CreateBy = userId ?? "",
                        CreateDate = DateTime.Now
                    }).ToList()));
             //
@@ -58,7 +58,7 @@ namespace ERPServer.Application.Mapping
                        Price = s.Price,
                        ProductId = s.ProductId,
                        Quantity = s.Quantity,
-                       CreateBy = userId ?? "",
+                       //CreateBy = userId ?? "",
                        CreateDate = DateTime.Now
                    }).ToList()));
         }

@@ -8,8 +8,9 @@ namespace ERPServer.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(DependencyInjection).Assembly);
             services.AddHttpContextAccessor();
+            //
+            services.AddAutoMapper(typeof(DependencyInjection).Assembly);
             services.AddMediatR(conf =>
             {
                 conf.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly);
