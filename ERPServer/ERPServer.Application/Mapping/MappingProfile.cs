@@ -3,6 +3,7 @@ using ERPServer.Application.Features.Customers.CreateCustomer;
 using ERPServer.Application.Features.Customers.UpdateCustomer;
 using ERPServer.Application.Features.Depots.CreateDepot;
 using ERPServer.Application.Features.Depots.UpdateDepot;
+using ERPServer.Application.Features.Invoices.CreateInvoice;
 using ERPServer.Application.Features.Orders.CreateOrder;
 using ERPServer.Application.Features.Orders.UpdateOrder;
 using ERPServer.Application.Features.Products.CreateProduct;
@@ -53,6 +54,19 @@ namespace ERPServer.Application.Mapping
             CreateMap<UpdateOrderCommand, Order>().ForMember(
                 member => member.OrderDetails, 
                 options => options.Ignore());
+            //
+            CreateMap<CreateInvoiceCommand, Invoice>()
+                .ForMember(m => m.InvoiceType,
+                o => o.MapFrom(p => InvoiceTypeEnum.FromValue(p.InvoiceType)))
+                .ForMember(m => m.InvoiceDetails,
+                o => o.MapFrom(p => p.InvoiceDetails.Select(
+                   s => new InvoiceDetail
+                   {
+                       Price = s.Price,
+                       ProductId = s.ProductId,
+                       Quantity = s.Quantity,
+                       CreateDate = DateTime.Now
+                   }).ToList()));
         }
     }
 }
