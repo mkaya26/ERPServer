@@ -5,26 +5,35 @@ using GenericRepository;
 using MediatR;
 using TS.Result;
 
-namespace ERPServer.Application.Features.Invoices.CreateInvoice
+namespace ERPServer.Application.Features.Invoices.UpdateInvoice
 {
-    internal sealed class CreateInvoiceCommandHandler(
+    internal sealed class UpdateInvoiceCommandHandler(
         IInvoiceRepository invoiceRepository,
         IStockMovementRepository stockMovementRepository,
         IUnitOfWork unitOfWork,
-        IMapper mapper) : IRequestHandler<CreateInvoiceCommand, Result<string>>
+        IMapper mapper) : IRequestHandler<UpdateInvoiceCommand, Result<string>>
     {
-        public async Task<Result<string>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            Invoice invoice = mapper.Map<Invoice>(request);
+            Invoice invoice = await invoiceRepository.GetByExpressionWithTrackingAsync(f => f.Id == request.Id, cancellationToken);
             //
-            if(invoice.InvoiceDetails is not null)
+            if(invoice is null)
+            {
+                return Result<string>.Failure("Fatura bulunamadı.");
+            }
+            //
+            await stockMovementRepository.DeleteByExpressionAsync(f => f.InvoiceId == request.Id, cancellationToken);
+            //
+            mapper.Map(request, invoice);
+            //
+            if (request.InvoiceDetails is not null)
             {
                 List<StockMovement> movements = new();
-                foreach(var item in invoice.InvoiceDetails)
+                foreach (var item in request.InvoiceDetails)
                 {
                     StockMovement movement = new()
                     {
-                        InvoiceId = item.InvoiceId,
+                        InvoiceId = request.Id,
                         NumberOfEntries = request.InvoiceType == 1 ? item.Quantity : 0,
                         NumberOfOutputs = request.InvoiceType == 2 ? item.Quantity : 0,
                         DepotId = item.DepotId,
@@ -38,10 +47,9 @@ namespace ERPServer.Application.Features.Invoices.CreateInvoice
                 await stockMovementRepository.AddRangeAsync(movements, cancellationToken);
             }
             //
-            await invoiceRepository.AddAsync(invoice, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             //
-            return "Fatura başarıyla oluşturuldu.";
+            return "Fatura başarıyla güncelleştirildi.";
         }
     }
 }
