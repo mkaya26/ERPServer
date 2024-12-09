@@ -24,9 +24,9 @@ namespace ERPServer.Application.Features.Invoices.CreateInvoice
                 {
                     StockMovement movement = new()
                     {
-                        InvoiceId = item.InvoiceId,
-                        NumberOfEntries = request.InvoiceType == 1 ? item.Quantity : 0,
-                        NumberOfOutputs = request.InvoiceType == 2 ? item.Quantity : 0,
+                        InvoiceId = invoice.Id,
+                        NumberOfEntries = request.InvoiceTypeValue == 1 ? item.Quantity : 0,
+                        NumberOfOutputs = request.InvoiceTypeValue == 2 ? item.Quantity : 0,
                         DepotId = item.DepotId,
                         ProductId = item.ProductId,
                         Price = item.Price,

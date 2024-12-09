@@ -8,7 +8,6 @@ namespace ERPServer.Application.Features.Invoices.UpdateInvoice
         Guid Id,
         Guid CustomerId,
         DateOnly InvoiceDate,
-        string InvoiceNumber,
-        int InvoiceType,
+        string InvoiceNumberFull,
         List<InvoiceDetailDto> InvoiceDetails) : IRequest<Result<string>>;
 }
