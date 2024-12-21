@@ -8,5 +8,7 @@ namespace ERPServer.Domain.Entities
         public Product? Product { get; set; }
         public decimal Quantity { get; set; }
         public DateTime ProductionDate { get; set; }
+        public Guid DepotId { get; set; }
+        public Depot? Depot { get; set; }
     }
 }

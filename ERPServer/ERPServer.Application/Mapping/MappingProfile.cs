@@ -73,6 +73,8 @@ namespace ERPServer.Application.Mapping
             CreateMap<UpdateInvoiceCommand, Invoice>().ForMember(
                 member => member.InvoiceDetails,
                 options => options.Ignore());
+            //
+            CreateMap<CreateProductCommand, Product>();
         }
     }
 }
