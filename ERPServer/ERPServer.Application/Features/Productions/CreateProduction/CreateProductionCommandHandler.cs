@@ -19,6 +19,8 @@ namespace ERPServer.Application.Features.Productions.CreateProduction
         {
             Production production = mapper.Map<Production>(request);
             //
+            production.ProductionDate = DateTime.Now;
+            //
             List<StockMovement> newStockMovements = new();
             //
             Recipe? recipe = await recipeRepository.Where(p => p.ProductId == request.ProductId)
@@ -52,19 +54,20 @@ namespace ERPServer.Application.Features.Productions.CreateProduction
                         decimal quantity = movements.Where(f => f.DepotId == depotId)
                             .Sum(s => s.NumberOfEntries - s.NumberOfOutputs);
                         //
-                        decimal totalPrice = movements
+                        decimal totalAmount = movements
                             .Where(f => f.DepotId == depotId && f.NumberOfEntries > 0)
-                            .Sum(s => s.Price);
+                            .Sum(s => s.Price * s.NumberOfEntries);
                         //
                         decimal totalEntiresQuantity = movements
                             .Where(f => f.DepotId == depotId && f.NumberOfEntries > 0)
                             .Sum(s => s.NumberOfEntries);
                         //
-                        decimal price = totalPrice / totalEntiresQuantity;
+                        decimal price = totalAmount / totalEntiresQuantity;
                         //
                         StockMovement stockMovement = new()
                         {
-                            ProductId = production.Id,
+                            ProductionId = production.Id,
+                            ProductId = item.ProductId,
                             DepotId = depotId,
                             Price = price
                         };
