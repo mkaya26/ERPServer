@@ -10,6 +10,8 @@ using ERPServer.Application.Features.Orders.UpdateOrder;
 using ERPServer.Application.Features.Productions.CreateProduction;
 using ERPServer.Application.Features.Products.CreateProduct;
 using ERPServer.Application.Features.Products.UpdateProduct;
+using ERPServer.Application.Features.Users.CreateUser;
+using ERPServer.Application.Features.Users.UpdateUser;
 using ERPServer.Domain.Entities;
 using ERPServer.Domain.Enums;
 using Microsoft.AspNetCore.Http;
@@ -76,6 +78,9 @@ namespace ERPServer.Application.Mapping
                 options => options.Ignore());
             //
             CreateMap<CreateProductionCommand, Production>();
+            //
+            CreateMap<CreateUserCommand, AppUser>();
+            CreateMap<UpdateUserCommand, AppUser>();
         }
     }
 }
