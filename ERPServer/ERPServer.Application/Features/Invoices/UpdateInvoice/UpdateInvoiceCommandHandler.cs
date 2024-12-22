@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ERPServer.Domain.Entities;
+using ERPServer.Domain.Enums;
 using ERPServer.Domain.Repositories;
 using GenericRepository;
 using MediatR;
@@ -12,6 +13,7 @@ namespace ERPServer.Application.Features.Invoices.UpdateInvoice
         IInvoiceRepository invoiceRepository,
         IInvoiceDetailRepository invoiceDetailRepository,
         IStockMovementRepository stockMovementRepository,
+        IOrderRepository orderRepository,
         IUnitOfWork unitOfWork,
         IMapper mapper) : IRequestHandler<UpdateInvoiceCommand, Result<string>>
     {
@@ -63,6 +65,16 @@ namespace ERPServer.Application.Features.Invoices.UpdateInvoice
                     movements.Add(movement);
                 }
                 await stockMovementRepository.AddRangeAsync(movements, cancellationToken);
+            }
+            //
+            if (request.OrderId is not null)
+            {
+                Order? order = await orderRepository.GetByExpressionWithTrackingAsync(f => f.Id == request.OrderId, cancellationToken);
+                //
+                if (order is not null)
+                {
+                    order.Status = OrderStatusEnum.Complated;
+                }
             }
             //
             await unitOfWork.SaveChangesAsync(cancellationToken);
