@@ -1,4 +1,5 @@
 ﻿using ERPServer.Application.Features.Units.CreateSystemUnit;
+using ERPServer.Application.Features.Units.GetAllTopUnit;
 using ERPServer.Application.Features.Users.GetUserById;
 using ERPServer.WebAPI.Abstractions;
 using MediatR;
@@ -13,6 +14,13 @@ namespace ERPServer.WebAPI.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> CreateSystemUnits(CreateSystemUnitCommand request, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return StatusCode(response.StatusCode, response);
+        }
+        //
+        [HttpPost]
+        public async Task<IActionResult> GetAllTopUnit(GetAllTopUnitQuery request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);
